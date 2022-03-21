@@ -30,12 +30,22 @@ console.log('example task:', processFirstItem(['foo','bar'],function(str){return
   Study the code for counter1 and counter2, then answer the questions below.
   
   1. What is the difference between counter1 and counter2?
-  
+      counter1 defines the variable 'count' within the function, making that variable only accessable within the function. 
+      counter2, on the other hand, defines the 'count' variable in the global space, making that variable accessable to all code
   2. Which of the two uses a closure? How can you tell?
-  
+      Both functions use closure, because both are referancing variables outside of the local scope of a function. For counter 1, 
+      the embeded function 'counter()' is referancing the variable 'count', which exists within the 'counterMaker()' function but outside
+      of the 'counter()' function. for counter 2, the function is referancing the variable 'count', which exists outside of the function
+      and within the global space.
   3. In what scenario would the counter1 code be preferable? In what scenario would 
      counter2 be better?  
-*/
+      counter1 is preferable when one wants to run the counterMaker function without forever changing the count variable. one can create
+      a variable that set equal to the 'counter()' function, which will effectively change the 'count' variable as it relates to the 'counter 1'
+      variable seen below, but the original function stays in tact with a count of 0. This would be useful if one wanted to create multiple 
+      counters without making new functions. 
+      Using the counter 2 function will change the count variable every time the function is called. It would be useful if one only 
+      wanted to know how many times the function was called, and did not have any need for multiple different counts.*/
+
 
 // counter1 code
 function counterMaker() {
@@ -64,8 +74,8 @@ Use the inning function below to do the following:
 NOTE: This will be a callback function for the tasks below
 */
 
-function inning(/*Code Here*/){
-    /*Code Here*/
+function inning(){
+  return Math.floor(Math.random() * 3)
 }
 
 
@@ -83,8 +93,15 @@ Use the finalScore function below to do the following:
 }
 */ 
 
-function finalScore(/*Code Here*/){
-  /*Code Here*/
+function finalScore(callbackFunction, numOfInnings){
+  let homeScore = 0;
+  let awayScore = 0;
+  for (let i = 0; i < (numOfInnings); i++){
+      homeScore = homeScore + callbackFunction()
+      awayScore = awayScore + callbackFunction()
+    }
+   return {Home: homeScore,
+           Away: awayScore}
 }
 
 
@@ -101,9 +118,13 @@ For example: invoking getInningScore(inning) might return this object:
   */
 
 
-function getInningScore(/*Your Code Here */) {
-  /*Your Code Here */
-
+function getInningScore(callbackFunction) {
+  let homeScore = 0;
+  let awayScore = 0;
+    homeScore = homeScore + callbackFunction()
+    awayScore = awayScore + callbackFunction()
+  return {Home: homeScore,
+         Away: awayScore};
 }
 
 
@@ -147,8 +168,24 @@ Use the scoreboard function below to do the following:
   "This game will require extra innings: Away 10 - Home 10"
 ] */
 // NOTE: There is no test associated with this code; if your output matches the given example, consider it complete!
-function scoreboard(/* CODE HERE */) {
-  /* CODE HERE */
+function scoreboard(func1, func2, numOfInnings) {
+  let array = []
+   let homeScore = 0;
+   let awayScore = 0;  
+     for (let i = 0; i < numOfInnings; i++) {
+      let homeScore1 = func1(func2).Home;
+      let awayScore1 = func1(func2).Away;
+       homeScore = homeScore + homeScore1
+       awayScore = awayScore + awayScore1
+    array.push(`Inning ${i+1}: Away ${awayScore1} - Home ${homeScore1}`)
+  }
+  if (homeScore === awayScore) {
+    array.push('This game will require extra innings')
+    return array
+  } else {
+    array.push(`Final score: Away ${awayScore} - Home ${homeScore}`)
+    return array
+  }
 }
 
 
